@@ -1,37 +1,25 @@
 import 'package:flutter/material.dart';
-import 'Screens/advert.dart';
-import 'Screens/favorite.dart';
+import 'Screens/ad.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'models/adverts.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(AdvertisementAdapter());
+  box = await Hive.openBox('box');
+  box.put(
+    "advert",
+    Advertisement(
+        author: Author(name: "Имя", phoneNumber: "Номер телефона"),
+        category: "Недвижимость",
+        name: "Продам гараж",
+        price: Price.free,
+        publicationDate: DateTime.now(),
+        description:
+            "Делали бар, получися гараж, нам он нахуй не нужен мб вам пойдёт.",
+        image: ""),
+  );
+  Advertisement advert = box.get('advert');
+  print(advert.author.name);
   runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-          floatingActionButton: Ink(
-            decoration: const ShapeDecoration(
-              color: Color.fromARGB(255, 90, 226, 235),
-              shape: CircleBorder(),
-            ),
-            child: IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () {},
-            ),
-          ),
-          appBar: AppBar(
-            actions: [
-              Container(
-                  padding: EdgeInsets.symmetric(horizontal: 15),
-                  child: IconButton(
-                      onPressed: () {}, icon: Icon(Icons.favorite_border)))
-            ],
-            title: Text("Addboard"),
-          )),
-    );
-  }
 }
